@@ -1,5 +1,6 @@
 import argparse
 from storage import load_tasks
+from export import export_csv
 
 parser = argparse.ArgumentParser(prog="lantern")
 sub = parser.add_subparsers(dest="command")
@@ -20,6 +21,13 @@ list_parser.add_argument(
     "--sort",
     action="store_true",
     help="Sort tasks alphabetically by title"
+)
+
+export_parser = sub.add_parser("export")
+export_parser.add_argument(
+    "--csv",
+    action="store_true",
+    help="Print tasks as CSV"
 )
 
 args = parser.parse_args()
@@ -46,3 +54,8 @@ elif args.command == "list":
         for task in tasks:
             print(task["title"])
 
+elif args.command == "export":
+    if args.csv:
+        export_csv(load_tasks())
+    else:
+        print("Use --csv to export tasks as CSV.")
